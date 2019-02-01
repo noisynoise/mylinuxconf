@@ -9,13 +9,21 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+
+############ MODIFIER KEY ###############
 set $mod Mod4
 
+
+############ WINDOW TITLE FONT ##########
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 8
+# Default :
+# font pango:DejaVu Sans Mono 8
+# Custom below
+font pango:Terminus 8
+# font pango:Hack 8
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -23,6 +31,24 @@ font pango:DejaVu Sans Mono 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+
+############## COMPOSITOR - COMPTON #####
+# use compton :
+exec compton -b -d :0 --config /home/zmvw4098/.config/compton/compton.conf
+
+
+############### WALLPAPER ################
+# exec_always feh --bg-scale /home/zmvw4098/Pictures/SY-wallpaper.jpg
+exec_always feh --bg-scale /home/zmvw4098/Pictures/WP-akira-01.jpg
+
+
+############## LOCK SCREEN ###############
+# We need .PNG picture, NO .JPG
+# -t = tilling
+bindsym $mod+Shift+w exec i3lock -t -i /home/zmvw4098/Pictures/1252535.png
+
+
+############## APPLET - SYSTEM TRAY #####
 #use nm-applet in i3 :
 exec --no-startup-id nm-applet
 # user pasystray (pulseaudio systray)
@@ -31,6 +57,7 @@ exec /usr/bin/pasystray
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+############# SHORTCUTS #################
 # start a terminal
 bindsym $mod+Return exec rxvt-unicode -bg black -fg cyan
 # start urxvt
@@ -40,9 +67,11 @@ bindsym $mod+i exec  icedove
 # start pidgin
 bindsym $mod+p exec pidgin.orig 
 # start atom
-bindsym $mod+y exec atom
+# bindsym $mod+y exec atom
+bindsym $mod+y exec --no-startup-id i3-msg 'workspace 0'; exec atom
 #start firefox
-bindsym $mod+o exec /home/zmvw4098/firefox-57/firefox
+bindsym $mod+o exec /opt/firefox/firefox
+# bindsym $mod+o exec firefox
 #start libreoffice 
 bindsym $mod+l exec libreoffice 
 #start virt-manager
@@ -54,10 +83,17 @@ bindsym $mod+j exec palemoon
 #start chromium without proxy
 bindsym $mod+g exec chromium --no-proxy-server
 
+######## WORKSPACE <=> OUTPUT mapping ##########
+workspace "1: web browsing" output DP-2-2
+workspace "2: terminals" output DP-2-3
+workspace "3: Communications" output DP-2-1
 
+######### FORCE MAPPING APP <=> WORKSPACE #####
+#force pidgin windows on workspace4:
+# assign [class="Pidgin"] 3: Communications
+assign [class="Pidgin"] 3: Communications
+for_window [class="Pidgin"] focus
 
-# i3lock customization
-bindsym $mod+Shift+w exec i3lock -c 000000 -i /home/zmvw4098/NR-locker.jpg
 
 # disable mouse focus
 # we put this back to default (=yes)
@@ -133,28 +169,28 @@ bindsym $mod+q focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+ampersand workspace 1
-bindsym $mod+eacute workspace 2
-bindsym $mod+quotedbl workspace 3
+bindsym $mod+ampersand workspace 1: web browsing
+bindsym $mod+eacute workspace 2: terminals
+bindsym $mod+quotedbl workspace 3: Communications
 bindsym $mod+apostrophe workspace 4
 bindsym $mod+parenleft workspace 5
 bindsym $mod+minus workspace 6
 bindsym $mod+egrave workspace 7
 bindsym $mod+underscore workspace 8
 bindsym $mod+ccedilla workspace 9
-bindsym $mod+agrave workspace 10
+bindsym $mod+agrave workspace 0
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+eacute move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+1 move container to workspace 1: web browsing
+bindsym $mod+Shift+eacute move container to workspace 2: terminals
+bindsym $mod+Shift+3 move container to workspace 3: Communications
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+egrave move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+ccedilla move container to workspace 9
-bindsym $mod+Shift+agrave move container to workspace 10
+bindsym $mod+Shift+agrave move container to workspace 0
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -189,9 +225,67 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+# bar {
+#        status_command py3status -c /etc/i3status.conf
+#        tray_output eDP1
+# }
+#
+
+# bar {
+#         status_command i3status
+# # We define the monitor handling trays :
+# 	tray_output DP-2-2
+# }
+
+# we try i3blocks
+# bar {
+#   status_command i3blocks
+#   output eDP-1
+#   output DP-2-2
+#   output DP-2-3
+#   tray_output DP-2-2
+#   # separator_symbol "〆"
+#   separator_symbol "ɣ"
+#   colors {
+#     ## colors for GOOD (e.g IPv4 UP), BAD (e.g interface DOWN), and DEGRADED (no example atm) - i3status only (not i3blocks)
+#     # color_good #62E9FF
+#     # color_bad #4E1A19
+#     # color_degraded #C2C0C2
+#     ## colors for bar background, lines and separator
+#     background #985694
+#     #statusline #154549
+#     statusline #ffffff
+#     #separator #FF00EE
+#     separator #000000
+# 
+# # default colors, used as exmaple if changes are wanted
+#    focused_workspace  #4c7899 #285577 #ffffff
+#    active_workspace   #333333 #5f676a #ffffff
+#    inactive_workspace #333333 #222222 #888888
+#    urgent_workspace   #2f343a #900000 #ffffff
+#    binding_mode       #2f343a #900000 #ffffff
+#   }
+# }
+
+
+###################### i3 BAR CUSTOM CONFIG ##############
+## 20190123 - Now we try 1 bar specific to each screen
+# DP-2-3 / eDP-1 is main monitor
 bar {
-       status_command py3status -c /etc/i3status.conf
-       tray_output eDP1
+  status_command i3blocks -c /home/zmvw4098/.config/i3blocks/config-eDP1
+  output eDP-1
+  mode dock
+  tray_output none
+  separator_symbol "Φ"
+#  separator_symbol "☭"
+  colors {
+    statusline #6cd2ff
+    background #47349c
+    separator #ffceff
+  }  
 }
+

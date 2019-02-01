@@ -1,0 +1,34 @@
+# OrangeLabs env variables
+export HTTP_PROXY="proxy.rd.francetelecom.fr:8080"
+export HTTPS_PROXY="proxy.rd.francetelecom.fr:8080"
+export NO_PROXY="192.168.0.0/16"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# Add mount scripts directory to PATH :
+export PATH="$PATH:$HOME/mount_scripts"
+
+# color customization (we don't want unreadable blue colored folder names)
+LS_COLORS=$LS_COLORS:'di=0;35:'
+export LS_COLORS
+
+# use tmux-xpanes
+# source /opt/tmux-xpanes/activate.sh
+
+# aliases
+#alias lart="ls -lart"
+#alias nohash="egrep -v '(^.*#.*|^$)'"
+source ~/alias.sh
+
+# wal
+# wal -i ./Pictures/WP-debian-01.jpg &>/dev/null
+wal -i ./Pictures/SY-wallpaper.jpg &>/dev/null
+# wal -i ./Pictures/WP-akira-01.jpg &>/dev/null
+
+#cowsay 
+/home/zmvw4098/login-cowsay.sh > /tmp/cow.txt
+# fortune | cowsay | lolcat
+
+# neofetch 
+neofetch --ascii /tmp/cow.txt
